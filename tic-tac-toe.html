@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <title>Tic-Tac-Toe</title>
+</head>
+
+<style type="text/css">
+    body {
+        background-color: cyan;
+        display: grid;
+        grid-template-rows: 1fr [header-s] 250px [header-e r1-s] 150px [r1-e r2-s] 150px [r2-e r3-s] 150px [r3-e] 1fr;
+        grid-template-columns: [header-s] 1fr [xscore-s] 150px [xscore-e c1-s] 150px [c1-e c2-s] 150px [c2-e c3-s] 150px [c3-e yscore-s] 150px [yscore-e] 1fr [header-e];
+    }
+
+    .header {
+        grid-row: header-s/header-e;
+        grid-column: header-s/header-e;
+        font-family: "Sans-Serrif";
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        justify-content: center;
+        line-height: 0px;
+        border-bottom: 4px solid white;
+        margin-bottom: 50px;
+    }
+
+    .header h1 {
+        font-size: 50px;
+    }
+
+    .header p {
+        font-size: 25px;
+    }
+
+    .board {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        justify-content: center;
+        line-height: 0px;
+    }
+
+    .board p {
+        color: white;
+        font-family: "Roboto";
+        font-size: 100px;
+        font-weight: bold;
+    }
+
+    .r1 {
+        border-bottom: 2px solid white;
+    }
+
+    .r2 {
+        border-top: 2px solid white;
+        border-bottom: 2px solid white;
+    }
+
+    .r3 {
+        border-top: 2px solid white;
+    }
+
+    .c1 {
+        border-right: 2px solid white;
+    }
+
+    .c2 {
+        border-left: 2px solid white;
+        border-right: 2px solid white;
+    }
+
+    .c3 {
+        border-left: 2px solid white;
+    }
+
+    .b11 {
+        grid-row: r1-s/r1-e;
+        grid-column: c1-s/c1-e;
+    }
+
+    .b12 {
+        grid-row: r1-s/r1-e;
+        grid-column: c2-s/c2-e;
+    }
+
+    .b13 {
+        grid-row: r1-s/r1-e;
+        grid-column: c3-s/c3-e;
+    }
+
+    .b21 {
+        grid-row: r2-s/r2-e;
+        grid-column: c1-s/c1-e;
+    }
+
+    .b22 {
+        grid-row: r2-s/r2-e;
+        grid-column: c2-s/c2-e;
+    }
+
+    .b23 {
+        grid-row: r2-s/r2-e;
+        grid-column: c3-s/c3-e;
+    }
+
+    .b31 {
+        grid-row: r3-s/r3-e;
+        grid-column: c1-s/c1-e;
+    }
+
+    .b31 {
+        grid-row: r3-s/r3-e;
+        grid-column: c1-s/c1-e;
+    }
+
+    .b32 {
+        grid-row: r3-s/r3-e;
+        grid-column: c2-s/c2-e;
+    }
+
+    .b33 {
+        grid-row: r3-s/r3-e;
+        grid-column: c3-s/c3-e;
+    }
+
+    .strike-through {
+        background-color: white;
+    }
+
+    .horizontal {
+        -webkit-clip-path: polygon(0 52%, 100% 52%, 100% 48%, 0 48%);
+        clip-path: polygon(0 52%, 100% 52%, 100% 48%, 0 48%);
+    }
+
+    .verticle {
+        -webkit-clip-path: polygon(48% 0, 48% 100%, 52% 100%, 52% 0);
+        clip-path: polygon(48% 0, 48% 100%, 52% 100%, 52% 0);
+    }
+
+    .hide {
+        display: none;
+    }
+
+    .row1 {
+        grid-row: r1-s/r1-e;
+        grid-column: c1-s/c3-e;
+    }
+
+    .row2 {
+        grid-row: r2-s/r2-e;
+        grid-column: c1-s/c3-e;
+    }
+
+    .row3 {
+        grid-row: r3-s/r3-e;
+        grid-column: c1-s/c3-e;
+    }
+
+    .column1 {
+        grid-row: r1-s/r3-e;
+        grid-column: c1-s/c1-e;
+    }
+
+    .column2 {
+        grid-row: r1-s/r3-e;
+        grid-column: c2-s/c2-e;
+    }
+
+    .column3 {
+        grid-row: r1-s/r3-e;
+        grid-column: c3-s/c3-e;
+    }
+
+    .forwardslash {
+        grid-row: r1-s/r3-e;
+        grid-column: c1-s/c3-e;
+        -webkit-clip-path: polygon(98% 0, 0 98%, 2% 100%, 100% 2%);
+        clip-path: polygon(98% 0, 0 98%, 2% 100%, 100% 2%);
+    }
+
+    .backslash {
+        grid-row: r1-s/r3-e;
+        grid-column: c1-s/c3-e;
+
+        -webkit-clip-path: polygon(0 2%, 98% 100%, 100% 98%, 2% 0);
+        clip-path: polygon(0 2%, 98% 100%, 100% 98%, 2% 0);
+    }
+
+    .xScore {
+        color: white;
+        grid-row: r1-s/r1-e;
+        grid-column: xscore-s/xscore-e;
+        margin: none;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .yScore {
+        color: white;
+        grid-row: r1-s/r1-e;
+        grid-column: yscore-s/yscore-e;
+        margin: none;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .score-header {
+        border-bottom: 4px solid white;
+        font-size: 35px;
+        margin: 0;
+    }
+
+    #xScoreCount {
+        font-size: 35px;
+        margin: 0;
+    }
+
+    #yScoreCount {
+        font-size: 35px;
+        margin: 0;
+    }
+</style>
+<body>
+    <div class="header">
+        <h1>Tic Tac Toe</h1>
+        <p>Instructions: get 3 in a row by tapping a box to place your mark</p>
+    </div>
+
+    <div class="strike-through hide"></div>
+    
+    <div class="xScore">
+        <h3 class="score-header">X-Score</h3>
+        <p id="xScoreCount">0</p>
+    </div>
+
+    <div class="yScore">
+        <h3 class="score-header">Y-Score</h3>
+        <p id="yScoreCount">0</p>
+    </div>
+
+   <div class="b11 board r1 c1"><p id="p11"></p></div>
+   <div class="b12 board r1 c2"><p id="p12"></p></div>
+   <div class="b13 board r1 c3"><p id="p13"></p></div>
+
+   <div class="b21 board r2 c1"><p id="p21"></p></div>
+   <div class="b22 board r2 c2"><p id="p22"></p></div>
+   <div class="b23 board r2 c3"><p id="p23"></p></div>
+
+   <div class="b31 board r3 c1"><p id="p31"></p></div>
+   <div class="b32 board r3 c2"><p id="p32"></p></div>
+   <div class="b33 board r3 c3"><p id="p33"></p></div>
+</body>
+
+<script type="text/javascript">
+    var xORy = "X";
+    var xScore = 0;
+    var yScore = 0;
+
+    var box1="";
+    var box2="";
+    var box3="";
+    var box4="";
+    var box5="";
+    var box6="";
+    var box7="";
+    var box8="";
+    var box9="";
+
+    function togglexORy() {
+        if(xORy == "X") {
+            return xORy = "Y";
+        } else {
+            return xORy = "X";
+        }
+    }
+
+    function strikeThrough(direction, location) {
+        document.getElementsByClassName("strike-through")[0].classList.toggle(`${direction}`);
+        document.getElementsByClassName("strike-through")[0].classList.toggle(`${location}`);
+        document.getElementsByClassName("strike-through")[0].classList.toggle(`hide`);
+    }
+
+   document.getElementsByClassName("b11")[0].addEventListener("click", function() {
+       document.getElementById("p11").innerHTML = `${xORy}`;
+       box1 = `${xORy}`;
+       detectWin();
+       togglexORy();
+   });
+
+   document.getElementsByClassName("b12")[0].addEventListener("click", function() {
+       document.getElementById("p12").innerHTML = `${xORy}`;
+       box2 = `${xORy}`;
+       detectWin();
+       togglexORy();
+   });
+
+   document.getElementsByClassName("b13")[0].addEventListener("click", function() {
+       document.getElementById("p13").innerHTML = `${xORy}`;
+       box3 = `${xORy}`;
+       detectWin();
+       togglexORy();
+   });
+
+   document.getElementsByClassName("b21")[0].addEventListener("click", function() {
+       document.getElementById("p21").innerHTML = `${xORy}`;
+       box4 = `${xORy}`;
+       detectWin();
+       togglexORy();
+   });
+
+   document.getElementsByClassName("b22")[0].addEventListener("click", function() {
+       document.getElementById("p22").innerHTML = `${xORy}`;
+       box5 = `${xORy}`;
+       detectWin();
+       togglexORy();
+   });
+
+   document.getElementsByClassName("b23")[0].addEventListener("click", function() {
+       document.getElementById("p23").innerHTML = `${xORy}`;
+       box6 = `${xORy}`;
+       detectWin();
+       togglexORy();
+   });
+
+   document.getElementsByClassName("b31")[0].addEventListener("click", function() {
+       document.getElementById("p31").innerHTML = `${xORy}`;
+       box7 = `${xORy}`;
+       detectWin();
+       togglexORy();
+   });
+
+   document.getElementsByClassName("b32")[0].addEventListener("click", function() {
+       document.getElementById("p32").innerHTML = `${xORy}`;
+       box8 = `${xORy}`;
+       detectWin();
+       togglexORy();
+   });
+
+   document.getElementsByClassName("b33")[0].addEventListener("click", function() {
+       document.getElementById("p33").innerHTML = `${xORy}`;
+       box9 = `${xORy}`;
+       detectWin();
+       togglexORy();
+   });
+
+   function clearScreen() {
+    document.getElementById("p11").innerHTML = ``;
+    document.getElementById("p12").innerHTML = ``;
+    document.getElementById("p13").innerHTML = ``;
+
+    document.getElementById("p21").innerHTML = ``;
+    document.getElementById("p22").innerHTML = ``;
+    document.getElementById("p23").innerHTML = ``;
+
+    document.getElementById("p31").innerHTML = ``;
+    document.getElementById("p32").innerHTML = ``;
+    document.getElementById("p33").innerHTML = ``;
+
+    box1="";
+    box2="";
+    box3="";
+    box4="";
+    box5="";
+    box6="";
+    box7="";
+    box8="";
+    box9="";
+
+    var classList = document.getElementsByClassName("strike-through")[0].classList;
+    while (classList.length > 1) {
+        classList.remove(classList.item(1));
+    }
+    document.getElementsByClassName("strike-through")[0].classList.add("hide");
+   }
+
+   function winX() {
+        clearScreen();
+        document.getElementById("p12").innerHTML = `X`;
+        document.getElementById("p21").innerHTML = "W";
+        document.getElementById("p22").innerHTML = "I";
+        document.getElementById("p23").innerHTML = "N";
+        setTimeout(clearScreen, 2000);
+        setTimeout(function(){xScore=xScore + 1}, 2000);
+        setTimeout(function(){document.getElementById("xScoreCount").innerHTML = `${xScore}`}, 2100);
+   }
+
+   function winY() {
+        clearScreen();
+        document.getElementById("p12").innerHTML = `Y`;
+        document.getElementById("p21").innerHTML = "W";
+        document.getElementById("p22").innerHTML = "I";
+        document.getElementById("p23").innerHTML = "N";
+        setTimeout(clearScreen, 2000);
+        setTimeout(function(){yScore=yScore + 1}, 2000);
+        setTimeout(function(){document.getElementById("yScoreCount").innerHTML = `${yScore}`}, 2100);
+   }
+
+    function detectWin() {
+        if(box1 == "X") {
+            if(box2 == "X") {
+                if(box3 == "X") {
+                    strikeThrough("horizontal", "row1");
+                    setTimeout(winX, 2000);
+                }
+            }
+        }
+        
+        if(box1 == "Y") {
+            if(box2 == "Y") {
+                if(box3 == "Y") {
+                    strikeThrough("horizontal", "row1");
+                    setTimeout(winY, 2000);
+                }
+            }
+        }
+
+        if(box4 == "X") {
+            if(box5 == "X") {
+                if(box6 == "X") {
+                    strikeThrough("horizontal", "row2");
+                    setTimeout(winX, 2000);
+                }
+            }
+        }
+
+        if(box4 == "Y") {
+            if(box5 == "Y") {
+                if(box6 == "Y") {
+                    strikeThrough("horizontal", "row2");
+                    setTimeout(winY, 2000);
+                }
+            }
+        }
+
+        if(box7 == "X") {
+            if(box8 == "X") {
+                if(box9 == "X") {
+                    strikeThrough("horizontal", "row3");
+                    setTimeout(winX, 2000);
+                }
+            }
+        }
+
+        if(box7 == "Y") {
+            if(box8 == "Y") {
+                if(box9 == "Y") {
+                    strikeThrough("horizontal", "row3");
+                    setTimeout(winY, 2000);
+                }
+            }
+        }
+
+        if(box1 == "X") {
+            if(box4 == "X") {
+                if(box7 == "X") {
+                    strikeThrough("verticle", "column1");
+                    setTimeout(winX, 2000);
+                }
+            }
+        }
+
+        if(box1 == "Y") {
+            if(box4 == "Y") {
+                if(box7 == "Y") {
+                    strikeThrough("verticle", "column1");
+                    setTimeout(winY, 2000);
+                }
+            }
+        }
+
+    if(box2 == "X") {
+        if(box5 == "X") {
+            if(box8 == "X") {
+                strikeThrough("verticle", "column2");
+                setTimeout(winX, 2000)
+            }
+        }
+    }
+
+    if(box2 == "Y") {
+        if(box5 == "Y") {
+            if(box8 == "Y") {
+                 strikeThrough("verticle", "column2");
+                 setTimeout(winY, 2000);
+            }
+        }
+    }
+
+    if(box3 == "X") {
+        if(box6 == "X") {
+            if(box9 == "X") {
+                strikeThrough("verticle", "column3");
+                setTimeout(winX, 2000)
+            }
+        }
+    }
+
+    if(box3 == "Y") {
+        if(box6 == "Y") {
+            if(box9 == "Y") {
+                strikeThrough("verticle", "column3");
+                setTimeout(winY, 2000)
+            }
+        }
+    }
+
+    if(box1 == "X") {
+        if(box5 == "X") {
+            if(box9 == "X") {
+                strikeThrough("backslash", "slash");
+                setTimeout(winX, 2000)
+            }
+        }
+    }
+
+    if(box1 == "Y") {
+        if(box5 == "Y") {
+            if(box9 == "Y") {
+                strikeThrough("backslash", "slash");
+                setTimeout(winY, 2000)
+            }
+        }
+    }
+
+    if(box3 == "X") {
+        if(box5 == "X") {
+            if(box7 == "X") {
+                strikeThrough("forwardslash", "slash");
+                setTimeout(winX, 2000)
+            }
+        }
+    }
+
+    if(box3 == "Y") {
+        if(box5 == "Y") {
+            if(box7 == "Y") {
+                strikeThrough("forwardslash", "slash");
+                setTimeout(winY, 2000)
+            }
+        }
+    }
+}
+</script>
+</html>
