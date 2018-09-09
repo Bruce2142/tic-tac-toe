@@ -227,6 +227,16 @@
         font-size: 35px;
         margin: 0;
     }
+
+    #p30d {
+        grid-column: xscore-s/xscore-e;
+        grid-row: r3-s/r3-e;
+    }
+
+    #p34d {
+        grid-column: yscore-s/yscore-e;
+        grid-row: r3-s/r3-e;
+    }
 </style>
 <body>
     <div class="header">
@@ -242,7 +252,7 @@
     </div>
 
     <div class="yScore">
-        <h3 class="score-header">Y-Score</h3>
+        <h3 class="score-header">O-Score</h3>
         <p id="yScoreCount">0</p>
     </div>
 
@@ -257,6 +267,9 @@
    <div class="b31 board r3 c1"><p id="p31"></p></div>
    <div class="b32 board r3 c2"><p id="p32"></p></div>
    <div class="b33 board r3 c3"><p id="p33"></p></div>
+
+   <div class="board" id="p30d"><p id="p30"></p></div>
+   <div class="board" id="p34d"><p id="p34"></p></div>
 </body>
 
 <script type="text/javascript">
@@ -276,7 +289,7 @@
 
     function togglexORy() {
         if(xORy == "X") {
-            return xORy = "Y";
+            return xORy = "O";
         } else {
             return xORy = "X";
         }
@@ -364,6 +377,9 @@
     document.getElementById("p32").innerHTML = ``;
     document.getElementById("p33").innerHTML = ``;
 
+    document.getElementById("p30").innerHTML = ``;
+    document.getElementById("p34").innerHTML = ``;
+
     box1="";
     box2="";
     box3="";
@@ -394,13 +410,32 @@
 
    function winY() {
         clearScreen();
-        document.getElementById("p12").innerHTML = `Y`;
+        document.getElementById("p12").innerHTML = `O`;
         document.getElementById("p21").innerHTML = "W";
         document.getElementById("p22").innerHTML = "I";
         document.getElementById("p23").innerHTML = "N";
         setTimeout(clearScreen, 2000);
         setTimeout(function(){yScore=yScore + 1}, 2000);
         setTimeout(function(){document.getElementById("yScoreCount").innerHTML = `${yScore}`}, 2100);
+   }
+
+   function winT() {
+    clearScreen();
+        document.getElementById("p11").innerHTML = `T`;
+        document.getElementById("p12").innerHTML = `I`;
+        document.getElementById("p13").innerHTML = `E`;
+
+        document.getElementById("p21").innerHTML = "";
+        document.getElementById("p22").innerHTML = "";
+        document.getElementById("p23").innerHTML = "";
+
+        document.getElementById("p30").innerHTML = "G";
+        document.getElementById("p31").innerHTML = "A";
+        document.getElementById("p32").innerHTML = "M";
+        document.getElementById("p33").innerHTML = "E";
+        document.getElementById("p34").innerHTML = "!";
+
+        setTimeout(clearScreen, 2000);
    }
 
     function detectWin() {
@@ -413,9 +448,9 @@
             }
         }
         
-        if(box1 == "Y") {
-            if(box2 == "Y") {
-                if(box3 == "Y") {
+        if(box1 == "O") {
+            if(box2 == "O") {
+                if(box3 == "O") {
                     strikeThrough("horizontal", "row1");
                     setTimeout(winY, 2000);
                 }
@@ -431,9 +466,9 @@
             }
         }
 
-        if(box4 == "Y") {
-            if(box5 == "Y") {
-                if(box6 == "Y") {
+        if(box4 == "O") {
+            if(box5 == "O") {
+                if(box6 == "O") {
                     strikeThrough("horizontal", "row2");
                     setTimeout(winY, 2000);
                 }
@@ -449,9 +484,9 @@
             }
         }
 
-        if(box7 == "Y") {
-            if(box8 == "Y") {
-                if(box9 == "Y") {
+        if(box7 == "O") {
+            if(box8 == "O") {
+                if(box9 == "O") {
                     strikeThrough("horizontal", "row3");
                     setTimeout(winY, 2000);
                 }
@@ -467,9 +502,9 @@
             }
         }
 
-        if(box1 == "Y") {
-            if(box4 == "Y") {
-                if(box7 == "Y") {
+        if(box1 == "O") {
+            if(box4 == "O") {
+                if(box7 == "O") {
                     strikeThrough("verticle", "column1");
                     setTimeout(winY, 2000);
                 }
@@ -485,9 +520,9 @@
         }
     }
 
-    if(box2 == "Y") {
-        if(box5 == "Y") {
-            if(box8 == "Y") {
+    if(box2 == "O") {
+        if(box5 == "O") {
+            if(box8 == "O") {
                  strikeThrough("verticle", "column2");
                  setTimeout(winY, 2000);
             }
@@ -503,9 +538,9 @@
         }
     }
 
-    if(box3 == "Y") {
-        if(box6 == "Y") {
-            if(box9 == "Y") {
+    if(box3 == "O") {
+        if(box6 == "O") {
+            if(box9 == "O") {
                 strikeThrough("verticle", "column3");
                 setTimeout(winY, 2000)
             }
@@ -521,9 +556,9 @@
         }
     }
 
-    if(box1 == "Y") {
-        if(box5 == "Y") {
-            if(box9 == "Y") {
+    if(box1 == "O") {
+        if(box5 == "O") {
+            if(box9 == "O") {
                 strikeThrough("backslash", "slash");
                 setTimeout(winY, 2000)
             }
@@ -539,11 +574,33 @@
         }
     }
 
-    if(box3 == "Y") {
-        if(box5 == "Y") {
-            if(box7 == "Y") {
+    if(box3 == "O") {
+        if(box5 == "O") {
+            if(box7 == "O") {
                 strikeThrough("forwardslash", "slash");
                 setTimeout(winY, 2000)
+            }
+        }
+    }
+
+    else {
+        if(box1 != "") {
+            if(box2 != "") {
+                if(box3 != "") {
+                    if(box4 != "") {
+                        if(box5 != "") {
+                            if(box6 != "") {
+                                if(box7 != "") {
+                                    if(box8 != "") {
+                                        if(box9 != "") {
+                                            setTimeout(winT, 2000);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
