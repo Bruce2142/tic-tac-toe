@@ -1,1 +1,0 @@
-<?php header( 'Location: /tic-tac-toe.html' ) ;  ?>
